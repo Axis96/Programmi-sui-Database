@@ -45,9 +45,7 @@ public class CreazioneDigimon {
 	
 	
 	public static void giocaPartita(Connection connessione) throws SQLException {
-			
-	
-			while(true) {
+		while(true) {
 			System.out.println("Attendere che lo sfidante abbia inserito i suoi Digimon nella partita, poi premere 1");
 			int avvio = scanner.nextInt();
 			scanner.nextLine();
@@ -59,7 +57,14 @@ public class CreazioneDigimon {
 	
 	
 	public static boolean controlloSfidante(Connection connessione) throws SQLException {
-		PreparedStatement controlloAvvio = connessione.prepareStatement("select * from Partita;");
+		PreparedStatement getId = connessione.prepareStatement("select MAX(idPartita) from Partita ;");
+		ResultSet executeId = getId.executeQuery();
+		int idPartita=0;
+		while(executeId.next()) {
+			idPartita=executeId.getInt(1);
+		}
+		PreparedStatement controlloAvvio = connessione.prepareStatement("select * from Partita where idPartita = ? ;");
+		controlloAvvio.setInt(1, idPartita);
 		ResultSet execute = controlloAvvio.executeQuery();
 		while(execute.next()) {
 			if(execute.getBoolean("idSfidante") && execute.getBoolean("ds1") && execute.getBoolean("ds2") && execute.getBoolean("ds3")) {
@@ -71,34 +76,12 @@ public class CreazioneDigimon {
 	
 	
 	public static void giocaArena(Connection connessione) throws SQLException{
-		generaTurno(selezionaRandom(connessione));
 	}	
 	
 	
 	public static void generaTurno(int idDigimon) {
-		
 	}
 	
-	
-	public static int selezionaRandom(Connection connessione) throws SQLException {
-		PreparedStatement codicePartita = connessione.prepareStatement("select MAX(idPartita) from Partita;");
-		ResultSet execute = codicePartita.executeQuery();
-		int id=0;
-		while(execute.next()) {
-			id=execute.getInt("idPartita");
-		}
-		PreparedStatement squadraDigimon = connessione.prepareStatement("select * from Partita where id =?;");
-		squadraDigimon.setInt(1, id);
-		ResultSet executeSquadra = squadraDigimon.executeQuery();
-		int[] squadra = new int[3];
-		int i=0;
-		while(executeSquadra.next()) {
-			squadra[i]=executeSquadra.getInt("dc"+(i+1));
-			i++;
-		}
-		int idDigimonScelto = squadra[(int) (Math.random()*3)];
-		return idDigimonScelto;
-	}
 	
 	
 	public static void creaPartita(Connection connessione) throws SQLException {

@@ -70,18 +70,21 @@ public class GestioneSfidante {
 	public static void generaTurno(int idDigimon) {	
 	}
 	
-
-	
 	
 	public static void uniscitiAllaPartita(Connection connessione) throws SQLException {
-		String queryCreazionePartita= "UPDATE Partita SET idSfidante=? , ds1=? , ds2=? , ds3= ?  where password=?;";
+		String queryCreazionePartita= "UPDATE Partita SET idSfidante=? , ds1=? , ds2=? , ds3= ?  where idPartita=?;";
 		PreparedStatement prepareStatement = connessione.prepareStatement(queryCreazionePartita);
 		System.out.println("Inserisci il tuo id");
 		int idSecondo= scanner.nextInt();
 		scanner.nextLine();
 		
-		System.out.println("Inserisci la password della partita");
-		prepareStatement.setString(5, scanner.nextLine());
+		PreparedStatement getId = connessione.prepareStatement("select MAX(idPartita) from Partita ;");
+		ResultSet executeId = getId.executeQuery();
+		int idPartita=0;
+		while(executeId.next()) {
+			idPartita=executeId.getInt(1);
+		}
+		prepareStatement.setInt(5, idPartita);
 		
 		PreparedStatement sceltaDigimon = connessione.prepareStatement("select * from Digimon where idUtente =?;");
 		sceltaDigimon.setInt(1, idSecondo);
@@ -90,7 +93,8 @@ public class GestioneSfidante {
 		stampa(listaDigimon);		
 		
 		int[] digimonSelezionati=selezioneDigimon(connessione);
-
+		
+		prepareStatement.setInt(1, idSecondo);
 		prepareStatement.setInt(2, digimonSelezionati[0]);
 		prepareStatement.setInt(3, digimonSelezionati[1]);
 		prepareStatement.setInt(4, digimonSelezionati[2]);
