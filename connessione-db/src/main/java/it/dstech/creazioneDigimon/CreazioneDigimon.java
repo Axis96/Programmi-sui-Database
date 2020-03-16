@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class CreazioneDigimon {
@@ -62,19 +63,17 @@ public class CreazioneDigimon {
 			if(execute.getBoolean("idSfidante") && execute.getBoolean("ds1") && execute.getBoolean("ds2") && execute.getBoolean("ds3")) {
 				return true;
 			} 
-		} return false;
+		} 
+		return false;
 	}
 	
 	
 	public static void giocaArena(Connection connessione) throws SQLException{
-		
-			generaTurno(selezionaRandom(connessione));
-		
+		generaTurno(selezionaRandom(connessione));
 	}	
 	
 	
 	public static void generaTurno(int idDigimon) {
-		
 		
 	}
 	
@@ -97,7 +96,6 @@ public class CreazioneDigimon {
 		int idDigimonScelto = squadra[(int) (Math.random()*3)];
 		return idDigimonScelto;
 	}
-	
 	
 	
 	public static void creaPartita(Connection connessione) throws SQLException {
@@ -156,10 +154,10 @@ public class CreazioneDigimon {
 		PreparedStatement prepareStatement = connessione.prepareStatement(queryInserimentoDigimon);
 		System.out.println("Inserisci il nome");
 		prepareStatement.setString(1, scanner.nextLine());
-		prepareStatement.setInt(2, generaHP());
-		prepareStatement.setInt(3, generaAttacco());
-		prepareStatement.setInt(4, generaDifesa());
-		prepareStatement.setInt(5, generaResistenza());
+		prepareStatement.setInt(2, randInt(1000 ,1600 ) );
+		prepareStatement.setInt(3, randInt(100 ,150 ) );
+		prepareStatement.setInt(4, randInt(10 ,30 ) );
+		prepareStatement.setInt(5, randInt(5 , 10) );
 		
 		System.out.println("Inserisci lo stadio evolutivo");
 		prepareStatement.setString(6, scanner.nextLine());
@@ -199,59 +197,13 @@ public class CreazioneDigimon {
 			int idUtente = executeQuery.getInt(8);
 			String tipo = executeQuery.getString(9);
 			System.out.println(id + " " + nome + " " + hp + " " + atk + " " + def + " " + res + " " + evo + " " + idUtente + " " + tipo);
-		
 		}
 	}
 	
 	
-	public static int generaAttacco() {
-		int attacco = 0;
-		boolean condizione= true;
-		while(condizione) {
-			attacco = (int) (Math.random()*151);
-			if(attacco>100) {
-				condizione=false;
-			}
-		}
-		return attacco;
-	}
-	
-	
-	public static int generaDifesa() {
-		int difesa = 0;
-		boolean condizione= true;
-		while(condizione) {
-			difesa = (int) (Math.random()*31);
-			if(difesa>10) {
-				condizione=false;
-			}
-		}
-		return difesa;
-	}
-	
-	
-	public static int generaResistenza() {
-		int resistenza = 0;
-		boolean condizione= true;
-		while(condizione) {
-			resistenza = (int) (Math.random()*11);
-			if(resistenza>5) {
-				condizione=false;
-			}
-		}
-		return resistenza;
-	}
-	
-	
-	public static int generaHP() {
-		int HP = 0;
-		boolean condizione= true;
-		while(condizione) {
-			HP = (int) (Math.random()*1600);
-			if(HP>1000) {
-				condizione=false;
-			}
-		}
-		return HP;
+	public static int randInt(int min, int max ) {
+		Random rand = new Random();
+		int randomNum = rand.nextInt((max-min)-1)+min;
+		return randomNum;
 	}
 }
