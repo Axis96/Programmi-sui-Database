@@ -66,10 +66,9 @@ public class CreazioneDigimon {
 	}
 	
 	
-	public static void giocaArena(Connection connessione){
+	public static void giocaArena(Connection connessione) throws SQLException{
 		
 			generaTurno(selezionaRandom(connessione));
-			controlloTurno();
 		
 	}	
 	
