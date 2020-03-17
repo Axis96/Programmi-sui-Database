@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class CreatorePartita {
 	static Scanner scanner=new Scanner(System.in);
-	public static void main(String[] args) throws SQLException, ClassNotFoundException {
+	public static void main(String[] args) throws SQLException, ClassNotFoundException, InterruptedException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		String password ="SWCTvf0TtX";
 		String username = "J2bCsBdKMg";
@@ -38,7 +38,7 @@ public class CreatorePartita {
 	}
 	
 	
-	public static void giocaPartita(Connection connessione) throws SQLException {
+	public static void giocaPartita(Connection connessione) throws SQLException, InterruptedException {
 		while(true) {
 			System.out.println("Attendere che lo sfidante abbia inserito i suoi Digimon nella partita, poi premere 1");
 			int avvio = scanner.nextInt();
@@ -47,6 +47,56 @@ public class CreatorePartita {
 				giocaArena(connessione);
 			}
 		}
+	}
+	
+
+	
+	public static void giocaArena(Connection connessione) throws SQLException, InterruptedException{
+		for (int i = 0; i < 5; i++) {
+				generaTurno(connessione);
+		} 
+	}	
+	
+	public static void generaTurno(Connection connessione) throws InterruptedException, SQLException {
+		
+		
+			
+			
+			
+		while(controlloTurno(connessione)) {}
+	}
+	
+	
+	public static boolean controlloTurno(Connection connessione) throws SQLException, InterruptedException {
+		boolean condizione= true;
+		while(condizione) {
+			System.out.println("Aspetto 10 secondi per controllare se è il tuo turno");
+			for(int sec=0; sec<10; sec++) {
+				System.out.println(sec+1);
+				Thread.sleep(1000);
+			}
+			if(condizione) {
+			
+			} else {
+				condizione=false;
+			}
+		}
+		
+		/*PreparedStatement getId = connessione.prepareStatement("select MAX(idPartita) from Arena ;");
+		ResultSet executeId = getId.executeQuery();
+		int idPartita=0; 
+		while(executeId.next()) {
+			idPartita=executeId.getInt(1);
+		}
+		PreparedStatement controlloAvvio = connessione.prepareStatement("select * from Partita where idPartita = ? ;");
+		controlloAvvio.setInt(1, idPartita);
+		ResultSet execute = controlloAvvio.executeQuery();
+		while(execute.next()) {
+			if(execute.getBoolean("idSfidante") && execute.getBoolean("ds1") && execute.getBoolean("ds2") && execute.getBoolean("ds3")) {
+				return false;
+			} 
+		} */
+		return true;
 	}
 	
 	
@@ -67,16 +117,6 @@ public class CreatorePartita {
 		} 
 		return false;
 	}
-	
-	
-	public static void giocaArena(Connection connessione) throws SQLException{
-		
-	}	
-	
-	
-	public static void generaTurno(int idDigimon) {
-	}
-	
 	
 	
 	public static void creaPartita(Connection connessione) throws SQLException {
