@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.Random;
 import java.util.Scanner;
 
+import it.dstech.connessionedb.digimon.NuovoDigimon;
 import it.dstech.creazioneDigimon.Digimon;
 import it.dstech.creazioneDigimon.Giocatore;
 
@@ -172,8 +173,8 @@ public class CreatorePartita {
 	}
 	
 	
-	public static Digimon creazioneClasseDigimon(ResultSet statDigimon) throws SQLException{
-		Digimon nuovoDigimon = null;
+	public static NuovoDigimon creazioneClasseDigimon(ResultSet statDigimon) throws SQLException{
+		NuovoDigimon nuovoDigimon = null;
 		while (statDigimon.next()) {
 			String nome=statDigimon.getString("nome");
 			int hp = statDigimon.getInt(3);
@@ -181,10 +182,10 @@ public class CreatorePartita {
 			int def = statDigimon.getInt(5);
 			int res = statDigimon.getInt(6);
 			String stadio = statDigimon.getString(7);
-			StadioEvolutivo evo = StadioEvolutivo.valueOf(stadio);
-			Tipo tipo = Tipo.valueOf(statDigimon.getString(9));
+			String tipo2 =statDigimon.getString(9);
+			
 
-			nuovoDigimon= new Digimon(nome, hp, atk, def, res, evo, tipo);
+			nuovoDigimon= new NuovoDigimon(nome, hp, atk, def, res, stadio, tipo2);
 		}
 		return nuovoDigimon;
 	}
