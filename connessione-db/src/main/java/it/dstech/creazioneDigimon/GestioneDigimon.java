@@ -9,8 +9,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class GestioneDigimon {
-	static Scanner scanner=new Scanner(System.in);
-public static void main(String[] args) throws SQLException, ClassNotFoundException {
+	static Scanner scanner=new Scanner(System.in);	
+	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 	Class.forName("com.mysql.cj.jdbc.Driver");
 	String password ="SWCTvf0TtX";
 	String username = "J2bCsBdKMg";
@@ -47,15 +47,20 @@ public static void main(String[] args) throws SQLException, ClassNotFoundExcepti
 		prepareStatement.setInt(3, randInt(100 ,150 ) );
 		prepareStatement.setInt(4, randInt(10 ,30 ) );
 		prepareStatement.setInt(5, randInt(5 , 10) );
-		System.out.println("dammi lo stadio evolutivo del digimon");
-		System.out.println("PRIMARIO,INTERMEDIO,\r\n" + 
-	            "CAMPIONE,EVOLUTO,MEGA");
+		System.out.println("Dammi lo stadio evolutivo del digimon");
+		System.out.println("PRIMARIO,\r\n"
+				+ "INTERMEDIO,\r\n" + 
+	            "CAMPIONE,\r\n"
+	            + "EVOLUTO,\r\n"
+	            + "MEGA");
 		prepareStatement.setString(6, scanner.nextLine());
 		System.out.println("Inserisci l'id dell'utente");
 		prepareStatement.setString(7, scanner.nextLine());
 		System.out.println("Inserisci il tipo del Digimon");
-		System.out.println("FUOCO,ACQUA,\r\n" + 
-	            "ARIA,TERRA");
+		System.out.println("FUOCO,\r\n"
+				+ "ACQUA,\r\n" + 
+	            "ARIA,\r\n"
+	            + "TERRA");
 		prepareStatement.setString(8, scanner.nextLine());
 		prepareStatement.execute();
 	}

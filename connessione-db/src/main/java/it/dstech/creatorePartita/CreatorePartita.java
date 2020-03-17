@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.Random;
 import java.util.Scanner;
 
+import it.dstech.creazioneDigimon.Digimon;
+import it.dstech.creazioneDigimon.Giocatore;
+
 public class CreatorePartita {
 	static Scanner scanner=new Scanner(System.in);
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, InterruptedException {
@@ -49,22 +52,35 @@ public class CreatorePartita {
 		}
 	}
 	
-
 	
 	public static void giocaArena(Connection connessione) throws SQLException, InterruptedException{
 		for (int i = 0; i < 5; i++) {
-				generaTurno(connessione);
+				//generaTurno(connessione);
 		} 
 	}	
 	
-	public static void generaTurno(Connection connessione) throws InterruptedException, SQLException {
+	
+	/*public static void generaTurno(Connection connessione) throws InterruptedException, SQLException {
+		PreparedStatement getId = connessione.prepareStatement("select MAX(idPartita) from Partita ;");
+		ResultSet executeId = getId.executeQuery();
+		int idPartita=0;
+		while(executeId.next()) {
+			idPartita=executeId.getInt(1);
+		}
+		
+		PreparedStatement idGiocatore = connessione.prepareStatement("select idCreatore from Partita where idPartita = ?;");
+		idGiocatore.setInt(1, idPartita);
+		
+		String queryCreazioneArena= "INSERT INTO Arena ( idPartita, turno, ATK, DEF) VALUES (?, ?, ?, ?, ?);";
+		PreparedStatement prepareStatement = connessione.prepareStatement(queryCreazioneArena);
+		prepareStatement.setInt(1, idPartita);
+		prepareStatement.setString(2, "Giocatore id " +idGiocatore);
+		prepareStatement.setInt(3,  );
+		prepareStatement.setInt(4, );
 		
 		
-			
-			
-			
 		while(controlloTurno(connessione)) {}
-	}
+	}*/
 	
 	
 	public static boolean controlloTurno(Connection connessione) throws SQLException, InterruptedException {
@@ -142,6 +158,35 @@ public class CreatorePartita {
 		prepareStatement.setInt(4, digimonSelezionati[1]);
 		prepareStatement.setInt(5, digimonSelezionati[2]);
 		prepareStatement.execute();
+		
+		Giocatore primoGiocatore = new Giocatore(idPrimo, "Matteo");
+		
+		for (int idDigimonScelto : digimonSelezionati) {
+			PreparedStatement creaDigimon = connessione.prepareStatement("select * from Digimon where id =?;");
+			creaDigimon.setInt(1, idDigimonScelto);
+			ResultSet statDigimon = creaDigimon.executeQuery();
+			
+			primoGiocatore.getSquadraDigimon().add(creazioneClasseDigimon(statDigimon));
+			System.out.println(primoGiocatore.getSquadraDigimon());
+		}
+	}
+	
+	
+	public static Digimon creazioneClasseDigimon(ResultSet statDigimon) throws SQLException{
+		Digimon nuovoDigimon = null;
+		while (statDigimon.next()) {
+			String nome=statDigimon.getString("nome");
+			int hp = statDigimon.getInt(3);
+			int atk = statDigimon.getInt(4);
+			int def = statDigimon.getInt(5);
+			int res = statDigimon.getInt(6);
+			String stadio = statDigimon.getString(7);
+			StadioEvolutivo evo = StadioEvolutivo.valueOf(stadio);
+			Tipo tipo = Tipo.valueOf(statDigimon.getString(9));
+
+			nuovoDigimon= new Digimon(nome, hp, atk, def, res, evo, tipo);
+		}
+		return nuovoDigimon;
 	}
 	
 	
@@ -164,10 +209,8 @@ public class CreatorePartita {
 	
 	public static void menu() {
 		System.out.println("Cosa vuoi fare?");
-		System.out.println("1. Crea un Digimon nel database");
-		System.out.println("2. Rimuovi un Digimon dal database");
-		System.out.println("3. Crea partita");
-		System.out.println("4. Gioca partita");
+		System.out.println("1. Crea partita");
+		System.out.println("2. Gioca partita");
 		System.out.println("0. Esci");
 	}
 	
