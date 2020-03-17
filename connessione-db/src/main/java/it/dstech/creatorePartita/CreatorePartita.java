@@ -148,6 +148,7 @@ public class CreatorePartita {
 		PreparedStatement sceltaDigimon = connessione.prepareStatement("select * from Digimon where idUtente =?;");
 		sceltaDigimon.setInt(1, idPrimo);
 		ResultSet listaDigimon = sceltaDigimon.executeQuery();
+		
 		System.out.println("Ecco i digimon che hai a disposizione: ");
 		stampa(listaDigimon);		
 		
