@@ -1,10 +1,8 @@
 package it.dstech.creazioneDigimon;
 
-import it.dstech.creatorePartita.StadioEvolutivo;
-import it.dstech.creatorePartita.Tipo;
-
 public class Digimon {
 
+	private int id;
 	private String nome;
 	private int HP;
 	private int ATK;
@@ -16,8 +14,9 @@ public class Digimon {
 	
 	
 	
-	public Digimon(String nome, int hP, int aTK, int dEF, int rES, String evo, String tipo) {
+	public Digimon(int id, String nome, int hP, int aTK, int dEF, int rES, String evo, String tipo) {
 		super();
+		this.id= id;
 		this.nome = nome;
 		HP = hP;
 		ATK = aTK;
@@ -26,6 +25,47 @@ public class Digimon {
 		Evo = evo;
 		this.tipo = tipo;
 	}
+	
+	
+	public int calcoloHPSfidante(int difesa, int resistenza, int attacco) {
+		int danniSubiti =  (attacco-difesa)*(resistenza/100);
+		return danniSubiti;
+	}
+	
+	
+	public int calcoloVantaggio(String tipoSfidante){
+		int atk=this.ATK;
+		if (this.tipo.equals("FUOCO") && tipoSfidante.equals("ACQUA")) {
+			return atk *= 0.5;
+		} else if (this.tipo.equals("FUOCO") && tipoSfidante.equals("TERRA")){
+			return atk *= 2;
+		} else if (this.tipo.equals("TERRA") && tipoSfidante.equals("FUOCO")){
+			return atk *= 0.5;
+		} else if (this.tipo.equals("TERRA") && tipoSfidante.equals("ARIA")){
+			return atk *= 2;
+		} else if (this.tipo.equals("ACQUA") && tipoSfidante.equals("ARIA")){
+			return atk *= 0.5;
+		} else if (this.tipo.equals("ACQUA") && tipoSfidante.equals("FUOCO")){
+			return atk *= 2;
+		} else if (this.tipo.equals("ARIA") && tipoSfidante.equals("TERRA")){
+			return atk *= 0.5;
+		} else if (this.tipo.equals("ARIA") && tipoSfidante.equals("ACQUA")){
+			return atk *= 2;
+		}
+		return atk;
+	}
+	
+	
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	
 	public String getNome() {
 		return nome;
 	}
@@ -70,13 +110,8 @@ public class Digimon {
 	}
 	@Override
 	public String toString() {
-		return "nuovoDigimon [nome=" + nome + ", HP=" + HP + ", ATK=" + ATK + ", DEF=" + DEF + ", RES=" + RES + ", Evo="
+		return "[nome=" + nome + ", HP=" + HP + ", ATK=" + ATK + ", DEF=" + DEF + ", RES=" + RES + ", Evo="
 				+ Evo + ", tipo=" + tipo + "]";
 	}
-	
-
-
-
-	
 
 }
